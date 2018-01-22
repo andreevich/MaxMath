@@ -9,10 +9,10 @@ const sourcePath = path.join(__dirname, './src'),
 
 const conf = {
     entry: {
-        main: "./src/index.tsx"
+        main: "./src/index.tsx",
     },
     output: {
-        filename: '[name].[hash].js',
+        filename: '[name].js',
         path: buildPath
     },
 
@@ -80,13 +80,6 @@ const conf = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new require('stylelint-webpack-plugin')(),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks(module) {
-                const context = module.context;
-                return context && context.indexOf('node_modules') >= 0;
-            },
-        })
     ],
     devServer: {
         contentBase: path.join(__dirname, process.env.NODE_ENV === 'test' ? "dist-testing" : "dist"),
@@ -94,6 +87,7 @@ const conf = {
         disableHostCheck: true,
         port: 9000,
         hot: true,
+        https: true,
         proxy: {
             '/api/*': {
                 target: process.env.NODE_ENV === 'test'
@@ -111,8 +105,7 @@ const conf = {
 
 if (process.env.NODE_ENV !== 'development') {
     conf.plugins.push(
-        new ExtractTextPlugin('[name].[hash].css')/*,
-        new UglifyJsPlugin()*/
+        new ExtractTextPlugin('[name].css')
     );
     conf.module.rules.push(
         {
