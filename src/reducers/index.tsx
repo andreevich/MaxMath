@@ -1,0 +1,1 @@
+export {mainReducers} from './mainReducer';
